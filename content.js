@@ -29,17 +29,67 @@
                 return;
             }
 
-            // Get the curser position within the editor
             const activeElement = document.activeElement;
+            const textarea = document.querySelector(
+                ".inputarea.monaco-mouse-cursor-text"
+            );
+            if (!activeElement || activeElement !== textarea) {
+                return;
+            }
+            // Get the curser position within the editor
+            console.log(activeElement);
             if (activeElement) {
+                // get the position of the active element
                 const style = window.getComputedStyle(activeElement);
                 const position = {
                     top: style.top,
                     left: style.left,
                 };
+
+                // Get the start position of the editor
+                const startposstr = document.querySelector(
+                    ".monaco-scrollable-element.editor-scrollable"
+                ).style.left;
+                const startpos = parseInt(startposstr.replace(/[^0-9]/g, ""));
+
+                // Get the width of a character in the editor
+                const testElement = document.createElement("span");
+                testElement.style.fontFamily = textarea.style.fontFamily;
+                testElement.style.fontSize = textarea.style.fontSize;
+                testElement.style.fontWeight = textarea.style.fontWeight;
+                testElement.style.letterSpacing = textarea.style.letterSpacing;
+                testElement.style.fontFeatureSettings =
+                    textarea.style.fontFeatureSettings;
+                testElement.style.fontVariationSettings =
+                    textarea.style.fontVariationSettings;
+                testElement.style.lineHeight = textarea.style.lineHeight;
+                testElement.style.visibility = "hidden"; // Ensure it doesn't affect the page layout
+
+                testElement.textContent = "M";
+                document.body.appendChild(testElement);
+                const charwidth = testElement.getBoundingClientRect().width;
+                document.body.removeChild(testElement);
+
+                // Get the amount the editor has been scrolled
+                const scrolled = document.querySelector(
+                    ".lines-content.monaco-editor-background"
+                );
+                const scrolledRightStr = scrolled.style.left;
+                const scrolledDownStr = scrolled.style.top;
+                const scrollRight = parseInt(
+                    scrolledRightStr.replace(/[^0-9]/g, "")
+                );
+                const scrollDown = parseInt(
+                    scrolledDownStr.replace(/[^0-9]/g, "")
+                );
+
+                // Get the character at the position to the right of the cursor
                 const nextChar = getCharacterAtPosition(
-                    parseInt(position.top),
-                    Math.round((parseInt(position.left) - 83) / 7.7) //get left start position by user?
+                    parseInt(position.top) + scrollDown,
+                    Math.round(
+                        (parseInt(position.left) + scrollRight - startpos) /
+                            charwidth
+                    )
                 );
 
                 const specialCharacters = [
