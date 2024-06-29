@@ -19,7 +19,7 @@ Simply click the extension icon to toggle the feature on or off.
 - `icons/`: Directory containing the extension icons.
 
 ## Note
-This extension is not yet complete and requires further upgrades to be fully compatible with all layouts and scrolling behavior within Codetree's editor.
+Please note that this extension has not undergone extensive testing. We recommend using it at your own discretion.
 
 ## License
 
