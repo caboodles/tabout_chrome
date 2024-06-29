@@ -3,7 +3,7 @@
   "name": "TabOutForCodetree",
   "version": "1.0",
   "description": "Tab out of specific characters in Codetree Editor",
-  "permissions": ["activeTab", "storage", "scripting"],
+  "permissions": ["storage"],
   "background": {
     "service_worker": "background.js"
   },
