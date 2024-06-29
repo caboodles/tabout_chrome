@@ -1,5 +1,3 @@
-//todo : fix get curser position to be compatible with all layouts and scroll positions
-
 (function () {
     let TABOUT_ACTIVE = true;
 
@@ -37,7 +35,6 @@
                 return;
             }
             // Get the curser position within the editor
-            console.log(activeElement);
             if (activeElement) {
                 // get the position of the active element
                 const style = window.getComputedStyle(activeElement);
