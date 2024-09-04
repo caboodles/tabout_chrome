@@ -31,6 +31,12 @@
             const textarea = document.querySelector(
                 ".inputarea.monaco-mouse-cursor-text"
             );
+
+            //lets the code not tabout when there is a popup suggestion
+            if (textarea && textarea.getAttribute("aria-haspopup") === "true") {
+                return;
+            }
+
             if (!activeElement || activeElement !== textarea) {
                 return;
             }
@@ -140,6 +146,11 @@
 
         const span = targetDiv.querySelector("span");
         let textContent = span.textContent || span.innerHTML;
+
+        //code to allow tab in the start of line
+        if (textContent === "<span></span>") {
+            return null;
+        }
 
         if (cur < textContent.length) {
             return textContent[cur];
