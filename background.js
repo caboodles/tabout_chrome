@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.action.setBadgeText({ text: " " });
 });
 
-// When the extension icon is clicked, toggle the active state
+// Toggle active state when the extension icon is clicked
 chrome.action.onClicked.addListener(() => {
     chrome.storage.sync.get("active", (data) => {
         let newActiveState = !data.active;
@@ -22,7 +22,7 @@ function updateBadge(active) {
     });
 }
 
-// Listen for the keyboard command to simulate the execute button click
+// Listen for keyboard commands
 chrome.commands.onCommand.addListener((command) => {
     if (command === "simulate-execute-button-click") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -33,20 +33,42 @@ chrome.commands.onCommand.addListener((command) => {
                 });
             }
         });
+    } else if (command === "simulate-submit-button-click") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs[0]) {
+                chrome.scripting.executeScript({
+                    target: { tabId: tabs[0].id },
+                    func: simulateSubmitButtonClick,
+                });
+            }
+        });
     }
 });
 
 // Function to simulate clicking the execute button
 function simulateExecuteButtonClick() {
     const button = document.getElementById("execute-button");
-    console.log("Simulating execute button click.");
     if (button) {
         if (button.disabled) {
-            // Optionally enable the button if it's disabled
-            button.disabled = false;
+            button.disabled = false; // Enable if disabled
         }
         button.click();
     } else {
         console.log("Execute button not found.");
+    }
+}
+
+// Function to simulate clicking the submit button
+function simulateSubmitButtonClick() {
+    const button = document.querySelector(
+        'button[data-testid="submit-button"]'
+    );
+    if (button) {
+        if (button.disabled) {
+            button.disabled = false; // Enable if disabled
+        }
+        button.click();
+    } else {
+        console.log("Submit button not found.");
     }
 }
